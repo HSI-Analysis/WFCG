@@ -13,162 +13,66 @@ from sklearn.decomposition import PCA
 import sys
 
 class DataReader():
-    def __init__(self):
+    def __init__(self, dataset_name, traind_on):
+
         self.data_cube = None
-        self.g_truth = None
+        self.train_gt  = None
+        self.test_gt = None
+
+
+        path =  "../../HSI-Data/data_size=696x520/"
+        path = path + dataset_name + "/MAT" 
+
+        # load data
+        data = sio.loadmat(path  + "/data/" + dataset_name + ".mat") 
+        self.data_cube = data[list(data.keys())[3]].astype(np.float32)
+
+        shape = self.data_cube.shape
+        data_cube_new = np.zeros((shape[1], shape[2], shape[0]))
+
+        for i in range(31):
+            data_cube_new[:,:,i]  = self.data_cube[i, :, :]
+
+        self.data_cube = data_cube_new
+
+        prefix = dataset_name.split("_")[0]  # Extract "porcine2"
+        suffix = dataset_name.split("_")[1][:-3]  # Extract "696x520"
+
+        # load train on
+        #changed
+        middle = "not_" + traind_on
+       
+
+        train_gt = sio.loadmat(path + "/gt/" + f"{prefix}_{traind_on}_{suffix}_gt_m.mat")
+
+        
+   
+        self.train_gt = train_gt[list(train_gt.keys())[3]].astype(np.float32)
+       
+        # load test on
+        test_gt = sio.loadmat(path + "/gt/" + f"{prefix}_{middle}_{suffix}_gt_m.mat" )
+
+        self.test_gt = test_gt[list(test_gt.keys())[3]].astype(np.float32)
+
+
 
     @property
     def cube(self):
         return self.data_cube
-
     
     @property
-    def truth_mixed(self):
-        return self.g_truth_mixed.astype(np.int64)
+    def test(self):
+        return self.test_gt.astype(np.int64)
     
     @property
-    def truth_ed(self):
-        return self.g_truth_ed.astype(np.int64)
+    def train(self):
+        return self.train_gt.astype(np.int64)
     
-    @property
-    def truth_ml(self):
-        return self.g_truth_ml.astype(np.int64)
-
     @property
     def normal_cube(self):
         return (self.data_cube-np.min(self.data_cube)) / (np.max(self.data_cube)-np.min(self.data_cube))
 
 
-class PaviaURaw(DataReader):
-    def __init__(self):
-        super(PaviaURaw, self).__init__()
-        raw_data_package = sio.loadmat(r"E:\HSI_Classification\WFCG\Datasets\Pavia.mat")
-        self.data_cube = raw_data_package["paviaU"].astype(np.float32)
-        truth = sio.loadmat(r"E:\HSI_Classification\WFCG\Datasets\paviaU_gt.mat")
-        self.g_truth = truth["groundT"].astype(np.float32)
-
-
-class IndianRaw(DataReader):
-    def __init__(self):
-        super(IndianRaw, self).__init__()
-
-        #raw_data_package = sio.loadmat(r"E:\HSI_Classification\ZZ_WFCG\datasets\Indian_pines_corrected.mat")
-        raw_data_package = sio.loadmat("Datasets/Indian_pines_corrected.mat") # here
-
-        
-        self.data_cube = raw_data_package["data"].astype(np.float32)  #(145, 145, 200)
-        print(self.data_cube[0].shape)
-
-        #truth = sio.loadmat(r"E:\HSI_Classification\ZZ_WFCG\datasets\Indian_pines_gt.mat")
-        truth = sio.loadmat("Datasets/Indian_pines_gt.mat") # here
-
-        self.g_truth = truth["groundT"].astype(np.float32) #  (145, 145)
-        sys.exit()
-
-
-
-## Added
-class CowCube(DataReader):
-
-    def __init__(self):
-        super(CowCube, self).__init__()
-
-        raw_data_package = sio.loadmat("Datasets/Resized_520_696/Cow_cube/Cow_cube.mat") 
-        self.data_cube = raw_data_package["Cow_cube"].astype(np.float32)
-
-
-        new = np.zeros((520, 696, 31)) # resised
-        # new = np.zeros((850, 850, 31)) # croped
-        for i in range(31):
-            new[:,:,i]  = self.data_cube[i, :, :]
-        self.data_cube = new
-
-
-        truth_mixed = sio.loadmat("Datasets/Resized_520_696/Cow_cube/cow_cube_gt.mat")
-        self.g_truth_mixed = truth_mixed["Cow_cube_gt"].astype(np.float32)
-
-        truth_ed = sio.loadmat("Datasets/Resized_520_696/Cow_cube/cow_cube_gt_ed.mat")
-        self.g_truth_ed = truth_ed["Cow_cube_gt"].astype(np.float32)
-
-        truth_ml = sio.loadmat("Datasets/Resized_520_696/Cow_cube/cow_cube_gt_ml.mat")
-        self.g_truth_ml = truth_ml["COW_sample_1"].astype(np.float32)
-
-
-
-
-        
-        
-
-
-
-## Added
-class PigletCube(DataReader):
-    def __init__(self):
-        super(PigletCube, self).__init__()
-
-        raw_data_package = sio.loadmat("Datasets/Piglet_cube.mat") 
-
-        
-        self.data_cube = raw_data_package["Piglet_cube"].astype(np.float32)
-    
-        new = np.zeros((500, 1100, 151))
-
-        for i in range(151):
-            new[:,:,i]  = self.data_cube[i, :, :]
-
-        
-        self.data_cube = new
-       
-
-        
-        # truth = sio.loadmat("Datasets/Piglet_cube_gt.mat") 
-        truth = sio.loadmat("Datasets/Piglet_cube_gt_ed.mat") 
-
-
-        self.g_truth = truth["Piglet_cube_gt"].astype(np.float32)
-
-## Added
-class HumanCube(DataReader): # Human_cube_gt.mat
-    def __init__(self):
-        super(HumanCube, self).__init__()
-        raw_data_package = sio.loadmat("Datasets/Human_cube.mat") 
-
-        
-        self.data_cube = raw_data_package["Human_cube"].astype(np.float32)
-
-        print(self.data_cube.shape)
-
-        new = np.zeros((520, 696, 151))
-
-        for i in range(151):
-            new[:,:,i]  = self.data_cube[i, :, :]
-
-        
-        self.data_cube = new
-        
-
-        
-        # truth = sio.loadmat("Datasets/Human_cube_gt.mat") 
-        truth = sio.loadmat("Datasets/Human_cube_gt_ed.mat") 
-
-        self.g_truth = truth["Human_cube_gt"].astype(np.float32)
-        print(self.g_truth.shape)
-
-
-
-        
-
-
-
-
-
-class SalinasRaw(DataReader):
-    def __init__(self):
-        super(SalinasRaw, self).__init__()
-        raw_data_package = sio.loadmat(r"E:\HSI_Classification\WFCG\Datasets\Salinas_corrected.mat")
-        self.data_cube = raw_data_package["salinas_corrected"].astype(np.float32)
-        truth = sio.loadmat(r"E:\HSI_Classification\WFCG\Datasets\Salinas_gt.mat")
-        self.g_truth = truth["salinas_gt"].astype(np.float32)
 
 
 # PCA

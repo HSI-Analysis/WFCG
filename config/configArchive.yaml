@@ -1,0 +1,50 @@
+model:
+  model_name: "WFCG"
+
+data_input: 
+
+  # dataset_name: bovine0_696x520x31
+  # dataset_name: humen0_696x520x151
+  # dataset_name: porcine0_696x520x151
+  # dataset_name: porcine1_696x520x31
+  dataset_name: porcine2_696x520x31
+
+
+  # traind_on: "gt"
+  # traind_on: "gt_ed10"
+  # traind_on: "gt_ed20"
+  # traind_on: "gt_ed30"
+  traind_on: "gt_m"
+
+  # classes: 16
+  classes: 2
+
+
+data_split:
+  # samples_type: ratio
+  samples_type: fixed
+  # number
+  # ratio
+  split_size: 0.01
+  train_num: 10
+  val_num: 0
+  train_ratio: 0.01
+  val_ratio: 0.01
+  superpixel_scale: 2000
+
+network_config:
+  max_epoch: 250
+  learning_rate: 0.001
+  weight_decay: 0.001
+  lb_smooth: 0.01
+
+result_output:
+  # path_weight: E:\HSI_Classification\ZZ_WFCG\weights\
+  # path_result: E:\HSI_Classification\ZZ_WFCG\results\
+
+  path_weight: HSI_Classification/ZZ_WFCG/weights/ # here
+  path_result: HSI_Classification/ZZ_WFCG/results/
+
+
+
+

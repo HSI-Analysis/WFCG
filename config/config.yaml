@@ -2,26 +2,34 @@ model:
   model_name: "WFCG"
 
 data_input: 
-  # dataset_name: IndianPines
-  # dataset_name: CowCube
-  # dataset_name: CowCube_DE
-  dataset_name: CowCube_ML
-  # dataset_name: PigletCube
-  # dataset_name: PigletCube_DE
-  # dataset_name: HumenCube
-  # dataset_name: HumenCube_DE
-  # dataset_name = 'Loukia'
-  # dataset_name = 'Dioni'
-  # dataset_name = 'hanchuan'
-  # dataset_name = "pavia"
-  # dataset_name = "Salinas"
+  # dataset_name: porcine1_696x520x31
+  dataset_name: "porcine2_696x520x31"
+  # dataset_name: porcine3_696x520x31
+  # dataset_name: porcine4_696x520x31
+
+  # traind_on: "AA"
+  # traind_on: "AB"
+  # traind_on: "AC"
+  # traind_on: "BA"
+  # traind_on: "BB"
+  # traind_on: "BC"
+  # traind_on: "CA"
+  # traind_on: "CB"
+  # traind_on: "CC"
+
+
+
+
   # classes: 16
   classes: 2
 
+
 data_split:
-  samples_type: ratio
+  # samples_type: ratio
+  samples_type: fixed
   # number
   # ratio
+  split_size: 0.01
   train_num: 10
   val_num: 0
   train_ratio: 0.01
@@ -29,18 +37,11 @@ data_split:
   superpixel_scale: 2000
 
 network_config:
-  max_epoch: 300
+  max_epoch: 200
   learning_rate: 0.001
   weight_decay: 0.001
   lb_smooth: 0.01
 
 result_output:
-  # path_weight: E:\HSI_Classification\ZZ_WFCG\weights\
-  # path_result: E:\HSI_Classification\ZZ_WFCG\results\
-
-  path_weight: HSI_Classification/ZZ_WFCG/weights/ # here
-  path_result: HSI_Classification/ZZ_WFCG/results/
-
-
-
-
+  path_weight: HSI_Classification/ZZ_WFCG/weights/ # not used
+  path_result: ../../HSI DL Results/

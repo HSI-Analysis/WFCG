@@ -1,17 +1,17 @@
 import numpy as np
 
-def get_label(gt_reshape, train_index, val_index, test_index):
-    train_samples_gt = np.zeros(gt_reshape.shape)
+def get_label(train_gt_reshape, test_gt_reshape, train_index, val_index, test_index):
+    train_samples_gt = np.zeros(train_gt_reshape.shape)
     for i in range(len(train_index)):
-        train_samples_gt[train_index[i]] = gt_reshape[train_index[i]]
+        train_samples_gt[train_index[i]] = train_gt_reshape[train_index[i]]
 
-    test_samples_gt = np.zeros(gt_reshape.shape)
+    test_samples_gt = np.zeros(test_gt_reshape.shape)
     for i in range(len(test_index)):
-        test_samples_gt[test_index[i]] = gt_reshape[test_index[i]]
+        test_samples_gt[test_index[i]] = test_gt_reshape[test_index[i]]
 
-    val_samples_gt = np.zeros(gt_reshape.shape)
+    val_samples_gt = np.zeros(test_gt_reshape.shape)
     for i in range(len(val_index)):
-        val_samples_gt[val_index[i]] = gt_reshape[val_index[i]]
+        val_samples_gt[val_index[i]] = test_gt_reshape[val_index[i]]
 
     return train_samples_gt, test_samples_gt, val_samples_gt
 

@@ -29,6 +29,7 @@ Download and install miniconda (minimal setup with less start up libraries) or c
 Next activate the environment using the command:
 
 `conda activate WFCG`
+conda activate /Users/apple/opt/anaconda3/envs/WFCG
 
 Continue with installation of requirements:
 
